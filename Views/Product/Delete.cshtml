@@ -1,0 +1,15 @@
+﻿@model Product
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<form method="post">
+    <div class="">
+    Delete @Model.Name
+</div>
+<button type="submit" class="btn bg-danger" asp-controller="Product" asp-action="Delete" asp-route-id="@Model.ProductId">Yes</button>
+<button class="btn btn-primary" asp-controller="Product" asp-action="List" >No</button>
+
+</form>

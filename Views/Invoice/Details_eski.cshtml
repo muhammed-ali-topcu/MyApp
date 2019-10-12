@@ -1,0 +1,69 @@
+﻿@model InvoiceHeader
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Detail</h2>
+<form method="post" asp-controller="Invoice" asp-action="Create">
+
+    <div class="form-group">
+        <label asp-for="Customer"></label>
+        <select asp-for="CustomerId" class="form-control" asp-items="ViewBag.Customers">
+            <option selected disabled value="">selecte </option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Total"></label>
+        <input type="number" class="form-control" asp-for="Total" />
+    </div>
+    <div class="form-group">
+        <label asp-for="PaidAmount"></label>
+        <input type="number" class="form-control" asp-for="PaidAmount" />
+    </div>
+    <div class="form-group">
+        <label asp-for="UnpaidAmount"></label>
+        <input type="number" class="form-control" asp-for="UnpaidAmount" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Notes"></label>
+        <textarea class="form-control" asp-for="Notes"></textarea>
+    </div>
+
+  @if (Model.InvoiceDetails!=null)
+  {
+    @foreach (var item in Model.InvoiceDetails)
+    {
+        <div class="form-row">
+            <div class="col-1 ">
+                <h5>@item.InvoiceDetailId</h5>
+            </div>
+            <div class="col form-group">
+                <label asp-for="@item.Product"></label>
+                <select asp-for="@item.ProductId" class="form-control" asp-items="ViewBag.Products">
+                    <option selected disabled value="">select </option>
+                </select>
+            </div>
+            <div class="col form-group">
+                <label asp-for="@item.Product.ShortCode"></label>
+                <input type="number" class="form-control" />
+            </div>
+            <div class="col form-group">
+                <label asp-for="@item.Quantity"></label>
+                <input type="number" class="form-control" asp-for="@item.Quantity" />
+            </div>
+            <div class="col form-group">
+                <label asp-for="@item.Product.MonopolyPrice"></label>
+                <input type="number" class="form-control" />
+            </div>
+            <div class="col form-group">
+                <label>Tutar</label>
+                <input type="number" class="form-control" />
+            </div>
+        </div>
+    }
+
+  }
+    <button type="submit" class="btn btn-primary" asp-controller="Invoice" asp-action="Create">Save</button>
+</form>
+  

@@ -1,0 +1,15 @@
+﻿@model IEnumerable<Page>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<div class="list-group">
+    <a href="#" class="list-group-item list-group-item-action active">
+         Company name
+    </a>
+
+    @foreach (var item in Model)
+    {
+        <a asp-action="@item.Action"asp-controller="@item.Controller" class="list-group-item ">@item.Name</a>  
+    }
+</div>

@@ -1,0 +1,62 @@
+﻿@model InvoiceHeader
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+<form method="post" asp-controller="Invoice" asp-action="Create">
+
+    <div class="form-row">
+        <div class="col-5 form-group">
+            <label asp-for="Customer"></label>
+            <select asp-for="CustomerId" class="form-control" asp-items="ViewBag.Customers">
+                <option selected disabled value="">selecte </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Total"></label>
+            <input type="number" class="form-control" asp-for="Total" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Notes"></label>
+        <textarea class="form-control" asp-for="Notes"></textarea>
+    </div>
+
+    @if (Model.InvoiceDetails != null && Model.InvoiceDetails.Count > 0)
+    {
+        @for (int i = 0; i < Model.InvoiceDetails.Count; i++)
+
+        {
+            <div class="form-row">
+                <div class="col-1 ">
+                    <h5>item[@i]</h5>
+                </div>
+                <div class="col form-group">
+                    <label asp-for="InvoiceDetails[i].Product"></label>
+                    <select asp-for="InvoiceDetails[i].ProductId" class="form-control" asp-items="ViewBag.Products">
+                        <option selected disabled value="">select </option>
+                    </select>
+                </div>
+                <div class="col form-group">
+                    <label asp-for="InvoiceDetails[i].Product.ShortCode"></label>
+                    <label class="form-control">@Model.InvoiceDetails[i].Product.ShortCode</label>
+                </div>
+                <div class="col form-group">
+                    <label asp-for="InvoiceDetails[i].Quantity"></label>
+                    <input type="number" class="form-control" asp-for="InvoiceDetails[i].Quantity" v />
+                </div>
+                <div class="col form-group">
+                    <label asp-for="InvoiceDetails[i].Product.MonopolyPrice"></label>
+                    <label class="form-control">@Model.InvoiceDetails[i].Product.MonopolyPrice</label>
+                </div>
+                <div class="col form-group">
+                    <label for="">total</label>
+                    <label class="form-control">@(Model.InvoiceDetails[i].Quantity * Model.InvoiceDetails[i].Product.MonopolyPrice)</label>
+                </div>
+            </div>
+        }
+
+    }
+</form>

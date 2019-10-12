@@ -1,0 +1,8 @@
+﻿create invoice view add line https://www.w3schools.com/jquery/tryit.asp?filename=tryjquery_html_append
+
+use orderd list for invoice detail
+<ol>
+  <li>List item 1</li>
+  <li>List item 2</li>
+  <li>List item 3</li>
+</ol>

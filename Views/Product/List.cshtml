@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Product>
+@{
+    ViewData["Title"] = "ProductList";
+}
+
+
+
+<div class="container">
+    <div class="mb-3 pr-3">
+        <a class="btn btn-secondary" asp-controller="Product" asp-action="AddOrUpdate">Add New Product</a>
+    </div>
+
+    @if (Model.Count() <= 0)
+    {
+        <div class="alert alert-danger">
+            NO Recocord Found!
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <td>id</td>
+                    <td>Barkodu</td>
+                    <td>short code</td>
+                    <td>Name</td>
+                    <td>Purchase price</td>
+                    <td>Monopoly Price</td>
+                    <td>Detail</td>
+                    <td>Delete</td>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>@item.ProductId</td>
+                        <td>@item.Parcode</td>
+                        <td>@item.ShortCode</td>
+                        <td>@item.Name</td>
+                        <td>@item.PurchasePrice</td>
+                        <td>@item.MonopolyPrice</td>
+                        <td>
+                            <div >
+                                <a class="btn btn-primary" asp-controller="Product" asp-action="AddOrUpdate" asp-route-id="@item.ProductId">Details</a>
+                            </div>
+                        </td>
+                        <td>
+                            <div >
+                                <a class="btn btn-primary btn-danger btn-sm" asp-controller="Product" asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    }
+
+</div>
+
+@*
+    @foreach (var item in Model)
+    {
+        <p>
+            @item.Parcode---@item.ShortCode---@item.Name---@item.PurchasePrice---@item.MonopolyPrice---
+            <a asp-controller="Muhasebe" asp-action="ProductDetail" asp-route-id="@item.ProductId">Details</a>
+        </p>
+    }
+*@
+
+
+
+

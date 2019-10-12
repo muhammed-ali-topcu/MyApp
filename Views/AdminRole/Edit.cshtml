@@ -1,0 +1,88 @@
+﻿@model RoleDetails
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+
+/*role name
+members in this role
+members not in
+*/
+
+<form method="post">
+    <div class="form-group">
+        <label  asp-for="@Model.Role.Name">Role Name:</label>
+        <label  class="form-control">@Model.Role.Name</label>
+        <input type="hidden" name="RoleName" value="@Model.Role.Name" />
+        <input type="hidden" name="RoleId" value="@Model.Role.Id" />
+        
+
+    </div>
+    <br />
+    <span>Members play this role</span>
+    @if (Model.Members.Count() == 0)
+    {
+        <div class="alert alert-info">No member in this role</div>
+    }
+    else
+    {
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <td>Id</td>
+                    <td>Name</td>
+                    <td>Remove from this role</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Members)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.UserName</td>
+                        <td>
+
+                            <input type="checkbox" name="IdsToRemove" value="@item.Id" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <br />
+    <span >Member do not play this role</span>
+    @if (Model.NonMembers.Count() == 0)
+    {
+        <div class="alert alert-info">All members play this role</div>
+    }
+    else
+    {
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <td>Id</td>
+                    <td>Name</td>
+                    <td>Add to this role</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.NonMembers)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.UserName</td>
+                        <td>
+
+                            <input type="checkbox" name="IdsToAdd" value="@item.Id"  />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    <input type="submit" class="btn btn-primary" asp-controller="AdminRole" asp-action="Edit" value="Save" />
+
+</form>

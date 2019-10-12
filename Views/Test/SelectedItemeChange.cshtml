@@ -1,0 +1,114 @@
+﻿@model InvoiceHeader
+@{
+    ViewData["Title"] = "SelectedItemeChange";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>SelectedItemeChange</h2>
+
+<form>
+    <ol id="lines">
+        <li id="line1" class="form-row">
+
+            <div class="col form-group"> 
+                <select id="selectPro" asp-for="InvoiceDetails[0].ProductId" 
+                  
+                 class="form-control" asp-items="ViewBag.Products">
+                    <option selected disabled value="">select </option>
+                </select>
+            </div>
+            <div class="col form-group">
+                <label id="shortCode" type="number" class="form-control" />
+            </div>
+            <div class="col form-group">
+                <input id="quntity" type="number" class="form-control"  />
+            </div>
+            <div class="col form-group">
+                <label type="number" id="price" class="form-control" data-name="price" value="@TempData["price"]" />
+            </div>
+            <div class="col form-group">
+                <label type="number" name="total" class="form-control" />
+            </div>
+            <div class="col form-group">
+                <a onclick="removeLine()" class="form-control btn btn-primary btn-danger btn-sm" id="btnRemoveLine">remove </a>
+            </div>
+        </li>
+
+    </ol>
+
+    <div id="newLineHtml">
+        <li id="qrCode" class="form-row">
+
+            <div class="col form-group">
+                <select class="form-control" asp-items="ViewBag.Products">
+                    <option selected disabled value="">select </option>
+                </select>
+            </div>
+            <div class="col form-group">
+                <label type="number" class="form-control" />
+            </div>
+            <div class="col form-group">
+                <input type="number" class="form-control" value="1" />
+            </div>
+            <div class="col form-group">
+                <label type="number" class="form-control" data-name="price" value="@TempData["price"]" />
+            </div>
+            <div class="col form-group">
+                <label type="number" name="total" class="form-control" />
+            </div>
+            <div class="col form-group">
+                <a onclick="removeLine()" class=" btn btn-primary">X </a>
+            </div>
+        </li>
+    </div>
+
+    <div class="form-group">
+        <a class=" btn btn-primary " id="btnAddline">Addlilne </a>
+    </div>
+    <div id="divResult"> </div>
+</form>
+
+
+
+@section scripts{
+    <script type="text/javascript">
+        $('document').ready(function () {
+            $('#selectPro').change(function () {
+                var selectedOption = $('#selectPro  option:selected');
+                var productId = selectedOption.val();
+                console.log('selected value = ' + selectedOption.val() + '\n text :    ' + selectedOption.text());
+               // alert('value = ' + selectedOption.val() + '\n text :    ' + selectedOption.text());
+                $.ajax({
+                    type: 'GET',
+                    dataType: "json",
+                    data: { 'id': productId },
+                    url: '/test/getProductINfo/',
+                    success: function (result) {
+                        console.log(result);
+                        var product = result;
+                        $('#price').text(product.monopolyPrice);
+                        $('#shortCode').text(product.shortCode);
+                        $('#quntity').text(product.quntity);
+
+                        console.log("price " + product.monopolyPrice);
+                        $('#divResult').html(product.monopolyPrice);
+                    },
+                    error: function (result) {
+                        console.log(result);
+                        alert(result);
+                    }
+                });
+            });
+        });
+
+        $('document').ready(function () {
+            $('#btnAddline').click(function () {
+                var newLineHtml = $('#newLineHtml').html();
+                $('#lines').append(newLineHtml);
+               // $('ol').append('<li  class="form-row"> ' + '  <div class="col form-group"> < select class= "form-control" asp - items="ViewBag.Products" > <option selected disabled value="">select </option> </select > </div > '+ ' < div class= "col form-group" > <label type="number" class="form-control"></label></div > <div class="col form-group"><input type="number" class="form-control" value="1"></div><div class="col form-group"><label type="number" class="form-control" data-name="price"></label></div><div class="col form-group"><label type="number" name="total" class="form-control"></label></div><div class="col form-group"><a onclick="removeLine()" class="form-control btn btn-primary btn-danger btn-sm" >  remove </a></div>     </li> ');
+            });
+
+            $('#newLineHtml').hide();
+        });
+    </script>
+}

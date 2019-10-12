@@ -1,0 +1,12 @@
+﻿@model Product
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h3>@Model.Company.ApplicationUsers.FirstOrDefault().UserName</h3>
+<h3>@Model.Company.ApplicationUsers.FirstOrDefault().Id</h3>
+<h3>@Model.Company.ApplicationUsers.FirstOrDefault().PasswordHash</h3>
+@Model.Company.CompanyId--------------
+@Model.Company.Name
+
+

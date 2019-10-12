@@ -1,0 +1,101 @@
+﻿@model Product
+@{
+    ViewData["Title"] = "SelectList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>SelectList</h2>
+<form>
+    <div class="form-row">
+        <div class="col-1 ">
+            <h5>item[]</h5>
+        </div>
+        <div class="col form-group">
+            <select asp-for="ProductId" id="selectProduct" onchange="ajaxClick();" class="form-control" asp-items="ViewBag.Products">
+                <option selected disabled value="">select </option>
+            </select>
+        </div>
+        <div class="col form-group">
+            <label type="number" class="form-control" />
+        </div>
+        <div class="col form-group">
+            <input type="number" class="form-control" value="1" />
+        </div>
+        <div class="col form-group">
+            <label type="number" class="form-control" data-name="price" value="@TempData["price"]" />
+        </div>
+        <div class="col form-group">
+            <label type="number" name="total" class="form-control" />
+        </div>
+        <div class="col form-group">
+            <button class="form-control btn btn-primary btn-danger btn-sm" id="button1">button </button>
+
+        </div>
+
+
+
+    </div>
+
+    <div class="col form-group">
+        <select asp-for="ProductId" id="selectPro" class="form-control" asp-items="ViewBag.Products">
+            <option selected disabled value="">select </option>
+        </select>
+    </div>
+
+    <div id="divResult"></div>
+
+
+    <div clsss="form-group">
+        <button id="button3"> alert</button>
+    </div>
+
+    <div clsss="form-group">
+        <button id="button7"> confirmation</button>
+    </div>
+    <p>Click me away!</p>
+
+</form>
+@section scripts{
+    <script type="text/javascript">
+        $('document').ready(function () {
+            $('#button1').click(function () {
+                alert('jQuery Tutorial');
+            });
+        });
+        function ajaxClick() {
+            alert();
+        };
+        $(document).ready(function () {
+            $('#button3').click(function () {
+
+                alert()
+            })
+        });
+
+        $(document).ready(function () {
+            $('#button7').click(function () {
+
+                var res = confirm('fdfjksdjfskdljfkls')
+                alert(res)
+            })
+
+        });
+
+        $(document).ready(function () {
+            $('#selectPro').change(function () {
+
+                var selectedOption = $('#selectPro  option:selected');
+                console.log('value = ' + selectedOption.val() + '\n text :    ' + selectedOption.text());
+                alert('value = ' + selectedOption.val() + '\n text :    ' + selectedOption.text());
+
+            });
+            $("p").click(function () {
+                $(this).hide();
+            });
+        });
+
+
+
+
+    </script>
+}

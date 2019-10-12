@@ -1,0 +1,206 @@
+﻿@model InvoiceHeader
+@{
+    ViewData["Title"] = "CalculateTotal";
+}
+
+<h2>CalculateTotal</h2>
+
+
+<form method="post">
+
+    <div class="form-row">
+        <div class="col-5 form-group">
+            <label asp-for="Customer"></label>
+            <select asp-for="CustomerId" class="form-control" asp-items="ViewBag.Customers">
+                <option selected disabled value="">selecte </option>
+                <option selected value="4002"> 4002</option>
+            </select>
+        </div>
+
+        <div class=" col form-group">
+            <label>Total</label>
+            <label type="number" class="form-control" id="Total" />
+        </div>
+        <div class="col-3 form-group">
+            <label>Save</label>
+
+            <button type="submit" class="btn btn-primary form-control" asp-controller="Invoice" asp-action="Create">Save</button>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Notes"></label>
+        <textarea class="form-control" asp-for="Notes"></textarea>
+    </div>
+
+
+    <ol id="lines">
+        <li id="line1" class="form-row">
+
+            <div class="col form-group">
+                <select asp-for="InvoiceDetails[0].ProductId"
+                        class="form-control" asp-items="ViewBag.Products">
+                    <option selected disabled value="0">select </option>
+                </select>
+            </div>
+            <div class="col form-group">
+                <label id="shortCode0" type="number" class="form-control" />
+            </div>
+            <div class="col form-group">
+                <input asp-for="InvoiceDetails[0].Quantity" value="1" type="number" class="form-control" />
+            </div>
+            <div class="col form-group">
+                <label type="number" id="price0" class="form-control" />
+            </div>
+            <div class="col form-group">
+                <label type="number" name="total" id="subTotal0" class="form-control" />
+            </div>
+            <div class="col form-group">
+                <a class=" form-control btn btn-primary btn-danger btn-sm" id="btnRemoveLine0">remove </a>
+            </div>
+        </li>
+
+    </ol>
+
+
+    <div>
+        number of lines
+        <input id="numberOfLines" value="1" />
+    </div>
+
+    <div class="form-group">
+        <a class="btn btn-primary " id="AddLine3">Addlilne3 </a>
+    </div>
+</form>
+
+
+
+@section scripts{
+    <script type="text/javascript">
+        $('document').ready(function () {
+            AddLine();
+
+            $('#InvoiceDetails_0__Quantity').val(0);
+            $('#InvoiceDetails_0__ProductId').val(0);
+            $('#line1').hide();
+        });
+
+        $('document').ready(function () {
+            $('#AddLine3').click(function () {
+                AddLine();
+            });
+
+            $('#btnRemoveLine1').click(function () {
+                console.log(this.id); // or alert($(this).attr('id'));
+            });
+        });
+        function AddLine() {
+
+            var numberOfLines = $('#numberOfLines').val();
+            console.log('nuomber of lines : ' + numberOfLines);
+            var line1Html = $('#line1').html();
+
+            var newLineNubmer = parseInt(numberOfLines);
+            var newLineHtml = line1Html.toString().replace(/\InvoiceDetails_0/g, 'InvoiceDetails_' + newLineNubmer);
+            newLineHtml = newLineHtml.replace(/\InvoiceDetails\[0]/g, 'InvoiceDetails[' + newLineNubmer + ']');
+            newLineHtml = newLineHtml.replace('btnRemoveLine0', 'btnRemoveLine' + newLineNubmer);
+            newLineHtml = newLineHtml.replace('price0', 'price' + newLineNubmer);
+            newLineHtml = newLineHtml.replace('shortCode0', 'shortCode' + newLineNubmer);
+            newLineHtml = newLineHtml.replace('subTotal0', 'subTotal' + newLineNubmer);
+
+            newLineHtml = '<li id="line' + newLineNubmer + '" class="form-row">' + newLineHtml + ' </li>';
+            var el = $(newLineHtml);
+            console.log(' new line heml : ' + newLineHtml);
+            $('#lines').append(el);
+
+            $('#btnRemoveLine' + newLineNubmer).click(function () {
+                //remove Line
+                //confirm
+                ///make quntity 0 to check in serverside I will skip lines witth 0 quntiti or 0  product id
+                $('#InvoiceDetails_' + newLineNubmer + '__Quantity').val(0);
+                $('#subTotal' + newLineNubmer).text(0);
+                $('#InvoiceDetails_' + newLineNubmer + '__ProductId').val(0);
+                $('#line' + newLineNubmer).hide();
+                calulateTotal();
+
+            });
+
+            //selected item changing
+            $('#InvoiceDetails_' + newLineNubmer + '__ProductId').change(function () {
+
+                console.log('selectd item chnged : ' + this.id);
+
+                var selectedOption = $('#' + this.id + '  option:selected');
+                var productId = selectedOption.val();
+                var quntity = $('#InvoiceDetails_' + newLineNubmer + '__Quantity').val();
+                console.log('selected value = ' + selectedOption.val() + '\n text :    ' + selectedOption.text());
+                $.ajax({
+                    type: 'GET',
+                    dataType: "json",
+                    data: { 'id': productId },
+                    url: '/test/getProductINfo/',
+                    success: function (result) {
+                        console.log(result);
+                        var product = result;
+                        $('#price' + newLineNubmer).text(product.monopolyPrice);
+                        $('#shortCode' + newLineNubmer).text(product.shortCode);
+                        var subTotal = (parseInt(product.monopolyPrice)) * parseInt(quntity);
+                        $('#subTotal' + newLineNubmer).text(subTotal);
+
+                        console.log("price " + product.monopolyPrice);
+                        $('#divResult').html(product.monopolyPrice);
+                    },
+                    error: function (result) {
+                        console.log(result);
+                        alert(result);
+                    }
+                });
+                calulateTotal();
+            });
+
+            //calculate sub total
+            $('#InvoiceDetails_' + newLineNubmer + '__Quantity').change(function () {
+
+                var quntity = $('#InvoiceDetails_' + newLineNubmer + '__Quantity').val();
+                var price = $('#price' + newLineNubmer).text();
+                var subTotal = parseFloat(price) * parseFloat(quntity);
+                console.log('quntity changed:');
+                console.log(' quntity:' + quntity + '         price' + price + 'subtotal :' + subTotal);
+                $('#subTotal' + newLineNubmer).text(subTotal.toString());
+                calulateTotal();
+            });
+
+            //update total when subtotal change
+            $('#subTotal' + newLineNubmer).change(function () {
+                calulateTotal();
+            });
+
+            //update number of lines
+            $('#numberOfLines').val(parseInt(numberOfLines) + 1);
+        }
+
+        function calulateTotal() {
+            var numberOfLines = $('#numberOfLines').val();
+            var total = 0.0;
+            var subTotal = 0.0;
+            var quntity = 0.0;
+            var price = 0.0;
+
+            var temp = "";
+
+            console.log('calulateTotal function number of lines : ' + numberOfLines);
+            for (var i = 1; i < numberOfLines; i++) {
+                temp = $('#subTotal' + i).text();
+                total += parseFloat(temp);
+                console.log('total : ' + total);
+            }
+
+            $('#Total').text(total.toString());
+            console.log(total);
+        }
+
+
+
+
+    </script>
+
+}

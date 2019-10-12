@@ -1,0 +1,117 @@
+﻿@model InvoiceHeader
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+<form method="post" asp-controller="Invoice" asp-action="Create">
+    <div class="form-row">
+        <div class="col-5 form-group">
+            <label asp-for="Customer"></label>
+            <select asp-for="CustomerId" class="form-control" asp-items="ViewBag.Customers">
+                <option selected disabled value="">selecte </option>
+            </select>
+        </div>
+
+        <div class=" col form-group">
+            <label asp-for="Total"></label>
+            <input type="number" class="form-control" asp-for="Total" />
+        </div>
+        <div class="col-3 form-group">
+            <label>Save</label>
+
+            <button type="submit" class="btn btn-primary form-control" asp-controller="Invoice" asp-action="Create">Save</button>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Notes"></label>
+        <textarea class="form-control" asp-for="Notes"></textarea>
+    </div>
+
+
+    <br />
+    <div class="form-row">
+        <div class="col-1 ">
+            <h5>item</h5>
+        </div>
+        <div class="col form-group">
+            <label>Product</label>
+        </div>
+        <div class="col form-group">
+            <label>Shourt Code</label>
+        </div>
+        <div class="col form-group">
+            <label asp-for="InvoiceDetails[0].Quantity">Quntity</label>
+        </div>
+        <div class="col form-group">
+            <label asp-for="InvoiceDetails[0].Product.MonopolyPrice">price</label>
+        </div>
+        <div class="col form-group">
+            <label>total</label>
+        </div>
+        <div class="col form-group">
+            <label>X Remove</label>
+        </div>
+    </div>
+
+    @Html.ActionLink("Link title", "Action", "Controller", null, new
+ {
+    data_ajax = "true",
+    data_ajax_method = "GET",
+    data_ajax_mode = "replace",
+    data_ajax_update = "#update-container"
+ })
+    @for (int i = 0; i < Model.InvoiceDetails.Count; i++)
+
+    {
+            <div class="form-row">
+                <div class="col-1 ">
+                    <h5>item[@i]</h5>
+                </div>
+                <div class="col form-group">
+                    <select asp-for="InvoiceDetails[i].ProductId" onchange="ajaxClick();" class="form-control" asp-items="ViewBag.Products">
+                        <option selected disabled value="">select </option>
+                    </select>
+                </div>
+                <div class="col form-group">
+                    <label type="number" class="form-control" />
+                </div>
+                <div class="col form-group">
+                    <input type="number" class="form-control" asp-for="InvoiceDetails[i].Quantity" value="1" />
+                </div>
+                <div class="col form-group">
+                    <label type="number" class="form-control" data-name="price" value="@TempData["price"]" />
+                </div>
+                <div class="col form-group">
+                    <label type="number" name="total" class="form-control" />
+                </div>
+                <div class="col form-group">
+                    <button class="form-control btn btn-primary btn-danger btn-sm" asp-controller="Invoice" asp-action="RemoveLine">X </button>
+
+                </div>
+            </div>
+    }
+    <button type="submit" class="btn btn-primary addLine" asp-controller="Invoice" asp-action="AddLine">+ Add Line</button>
+
+    @section scripts{
+
+        <script>
+            function ajaxclick() {
+                var itemName = this.val();
+                $.ajax(function (res, req) {
+                    url: '\invoice\addline',
+                        data: [itemName],
+                            success: {
+                        $('[data-name]={price}').val(res(0));
+                    }, error{
+
+                    }
+
+                });
+            }
+            $(".addLine").click(function () {
+                
+            });
+        </script>
+    }
+</form>

@@ -1,0 +1,20 @@
+﻿@model IdentityRole
+@{
+    ViewData["Title"] = "Update";
+}
+
+<h2>Update</h2>
+<div class=" text-danger" asp-validation-summary="All"></div>
+<form method="post" asp-controller="AdminRole" asp-action="Update">
+
+    <div class="form-group">
+        <label asp-for="Id"></label>
+        <input disabled readonly asp-for="Id" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <button class="btn btn-primary" type="submit" asp-action="Update">Save</button>
+</form>

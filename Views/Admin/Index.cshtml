@@ -1,0 +1,46 @@
+﻿@model IEnumerable<ApplicationUser>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Users List</h2>
+
+<a asp-action="Create" asp-controller="Admin" class="btn btn-primary">Add User</a>
+
+@if (Model.Count() <= 0)
+{
+    <div>No record Found</div>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <td>Id</td>
+                <td>UserName</td>
+                <td>Email</td>
+                <td>Delete</td>
+            </tr>
+        </thead>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.UserName</td>
+                <td>@item.Email</td>
+                <td>
+                    <form method="post">
+                        <button class="btn btn-danger" asp-controller="Admin" asp-action="Delete" asp-route-id="@item.Id">
+                            Delete
+                        </button>
+                        <a class="btn btn-primary" asp-action="Update" asp-route-id="@item.Id" >Update</a>
+                    </form>
+                </td>
+            </tr>
+
+        }
+    </table>
+}
+
+

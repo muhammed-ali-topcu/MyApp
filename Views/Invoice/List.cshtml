@@ -1,0 +1,52 @@
+﻿@model IEnumerable<InvoiceHeader>
+@{
+    ViewData["Title"] = "List";
+}
+
+<h2>List</h2>
+
+    <div class="mb-3 pr-3">
+        <a class="btn btn-secondary" asp-controller="Invoice" asp-action="Create">Add New Invoice</a>
+    </div>
+
+    @if (Model.Count() <= 0)
+    {
+        <div class="alert alert-danger">
+            NO Recocord Found!
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <td>id</td>
+                    <td>customer</td>
+                    <td>Date</td>
+                    <td>Total</td>
+                    <td>User</td>
+                    <td>Detail</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <td>@item.InvoiceHeaderId</td>
+                        <td>@item.Customer.Name</td>
+                        <td>@item.Date</td>
+                        <td>@item.Total</td>
+                        <td>@item.ApplicationUser.UserName</td>
+                        <td>
+                            <div >
+                                <a class="btn btn-primary"  asp-controller="Invoice" asp-action="Details" asp-route-id="@item.InvoiceHeaderId">Details</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    }
+

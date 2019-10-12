@@ -1,0 +1,162 @@
+﻿@model InvoiceHeader
+@{
+    ViewData["Title"] = "RemoveLine3";
+}
+
+<h2>RemoveLine3</h2>
+
+<form method="post">
+
+    <div class="form-row">
+        <div class="col-5 form-group">
+            <label asp-for="Customer"></label>
+            <select asp-for="CustomerId" class="form-control" asp-items="ViewBag.Customers">
+                <option selected disabled value="">selecte </option>
+                <option selected value="6"> 6</option>
+            </select>
+        </div>
+
+        <div class=" col form-group">
+            <label asp-for="Total"></label>
+            <input type="number" class="form-control" asp-for="Total" />
+        </div>
+        <div class="col-3 form-group">
+            <label>Save</label>
+
+            <button type="submit" class="btn btn-primary form-control" asp-controller="Invoice" asp-action="Create">Save</button>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Notes"></label>
+        <textarea class="form-control" asp-for="Notes"></textarea>
+    </div>
+
+
+    <ol id="lines">
+        <li id="line0" class="form-row">
+
+            <div class="col form-group">
+                <select asp-for="InvoiceDetails[0].ProductId"
+                        class="form-control" asp-items="ViewBag.Products">
+                    <option selected disabled value="0">select </option>
+                </select>
+            </div>
+            <div class="col form-group">
+                <label id="shortCode0" type="number" class="form-control" />
+            </div>
+            <div class="col form-group">
+                <input asp-for="InvoiceDetails[0].Quantity" type="number" class="form-control" />
+            </div>
+            <div class="col form-group">
+                <label type="number" id="price0" class="form-control" data-name="price" />
+            </div>
+            <div class="col form-group">
+                <label type="number" id="total_0" name="total" class="form-control" />
+            </div>
+            <div class="col form-group">
+                <a class=" form-control btn btn-primary btn-danger btn-sm" id="btnRemoveLine0">remove </a>
+            </div>
+        </li>
+
+    </ol>
+
+
+    <div>
+        number of lines
+        <input id="numberOfLines" value="1" />
+    </div>
+
+    <div class="form-group">
+        <a class="btn btn-primary " id="AddLine3">Addlilne3 </a>
+    </div>
+</form>
+
+
+
+@section scripts{
+    <script type="text/javascript">
+
+        $('document').ready(function () {
+            $('#AddLine3').click(addLine);
+
+            init();
+        });
+
+        function addLine() {
+            var numberOfLines = $('#numberOfLines').val();
+            console.log('nuomber of lines : ' + numberOfLines);
+            var line1Html = $('#line0').html();
+
+            var newLineNubmer = parseInt(numberOfLines);
+            var newLineHtml = line1Html.toString().replace(/\InvoiceDetails_0/g, 'InvoiceDetails_' + newLineNubmer);
+            newLineHtml = newLineHtml.replace(/\InvoiceDetails\[0]/g, 'InvoiceDetails[' + newLineNubmer + ']');
+            newLineHtml = newLineHtml.replace('btnRemoveLine0', 'btnRemoveLine' + newLineNubmer);
+            newLineHtml = newLineHtml.replace('price0', 'price' + newLineNubmer);
+            newLineHtml = newLineHtml.replace('shortCode0', 'shortCode' + newLineNubmer);
+            newLineHtml = newLineHtml.replace('total_0', 'total_' + newLineNubmer);
+
+            newLineHtml = '<li id="line' + newLineNubmer + '" class="form-row">' + newLineHtml + ' </li>';
+            var el = $(newLineHtml);
+            console.log(' new line heml : ' + newLineHtml);
+            $('#lines').append(el);
+
+            $('#btnRemoveLine' + newLineNubmer).click(function () {
+                //remove Line
+                //confirm
+                ///make quntity 0 to check in serverside I will skip lines witth 0 quntiti or 0  product id
+                $('#InvoiceDetails_' + newLineNubmer + '__Quantity').val(0);
+                // $('#InvoiceDetails_' + newLineNubmer + '__ProductId').val(0);
+                $('#line' + newLineNubmer).hide();
+
+            });
+
+            $('#InvoiceDetails_' + newLineNubmer + '__ProductId').change(function () {
+
+                var selectedOption = $('#InvoiceDetails_' + newLineNubmer + '__ProductId  option:selected');
+                var productId = selectedOption.val();
+                console.log('selected value = ' + selectedOption.val() + '\n text :    ' + selectedOption.text());
+                // alert('value = ' + selectedOption.val() + '\n text :    ' + selectedOption.text());
+                $.ajax({
+                    type: 'GET',
+                    dataType: "json",
+                    data: { 'id': productId },
+                    url: '/test/getProductINfo/',
+                    success: function (result) {
+                        console.log(result);
+                        var product = result;
+                        $('#price' + newLineNubmer).text(product.monopolyPrice);
+                        $('#shortCode' + newLineNubmer).text(product.shortCode);
+                        // $('#quntity').text(product.quntity);
+
+                        console.log("price " + product.monopolyPrice);
+                        $('#divResult').html(product.monopolyPrice);
+                    },
+                    error: function (result) {
+                        console.log(result);
+                        alert(result);
+                    }
+                });
+
+
+
+            });
+            $('#InvoiceDetails_' + newLineNubmer + '__Quantity').change(function () { alert });
+            $('#price' + newLineNubmer).change(alert());
+
+
+
+            $('#numberOfLines').val(parseInt(numberOfLines) + 1);
+        }
+
+
+        function init() {//add new line and remove the 0 Line
+            $('#InvoiceDetails_0__Quantity').val(0);
+            $('#line0').hide();
+            addLine();
+        }
+
+
+
+    </script>
+
+}

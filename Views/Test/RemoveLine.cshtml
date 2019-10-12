@@ -1,0 +1,110 @@
+﻿@model InvoiceHeader
+@{
+    ViewData["Title"] = "RemoveLine";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>RemoveLine</h2>
+
+<form>
+    <ol id="lines">
+        <li id="line1" class="form-row">
+
+            <div class="col form-group">
+                <select class="form-control" asp-items="ViewBag.Products">
+                    <option selected disabled value="">select </option>
+                </select>
+            </div>
+            <div class="col form-group">
+                <label type="number" class="form-control" />
+            </div>
+            <div class="col form-group">
+                <input type="number" class="form-control" value="1" />
+            </div>
+            <div class="col form-group">
+                <label type="number" class="form-control" data-name="price" value="@TempData["price"]" />
+            </div>
+            <div class="col form-group">
+                <label type="number" name="total" class="form-control" />
+            </div>
+            <div class="col form-group">
+                <a onclick="removeLine()" class="form-control btn btn-primary btn-danger btn-sm" id="btnRemoveLine">remove </a>
+            </div>
+        </li>
+
+    </ol>
+
+        <div id="newLineHtml" >
+            <li id="qrCode" class="form-row">
+
+                <div class="col form-group">
+                    <select class="form-control" asp-items="ViewBag.Products">
+                        <option selected disabled value="">select </option>
+                    </select>
+                </div>
+                <div class="col form-group">
+                    <label type="number" class="form-control" />
+                </div>
+                <div class="col form-group">
+                    <input type="number" class="form-control" value="1" />
+                </div>
+                <div class="col form-group">
+                    <label type="number" class="form-control" data-name="price" value="@TempData["price"]" />
+                </div>
+                <div class="col form-group">
+                    <label type="number" name="total" class="form-control" />
+                </div>
+                <div class="col form-group">
+                    <a  onclick="removeLine()" class=" btn btn-primary"  >X </a>
+                </div>
+            </li>
+        </div>
+
+    <div class="form-group">
+        <a class=" btn btn-primary " id="btnAddline">Addlilne </a>
+    </div>
+</form>
+
+
+@section scripts{
+    <script type="text/javascript">
+        $('document').ready(function () {
+
+            function removeLine4() {
+                alert(this.id );
+                console.log($(this).attr('id'));
+            };
+            $('a').click(function () {
+                console.log(this.id); // or alert($(this).attr('id'));
+            });
+
+        });
+        function removeLine() {
+            
+            var result = confirm('Kayit silinsin mi?');
+            if (result == true)
+                $("#qrCode").remove();
+        };
+
+       
+        function selctListChange() {
+            $("#div3").remove();
+        }
+        $('document').ready(function () {
+            $('#btnAddline').click(function () {
+                var newLineHtml = $('#newLineHtml').html();
+                $('#lines').append(newLineHtml);
+               // $('ol').append('<li  class="form-row"> ' + '  <div class="col form-group"> < select class= "form-control" asp - items="ViewBag.Products" > <option selected disabled value="">select </option> </select > </div > '+ ' < div class= "col form-group" > <label type="number" class="form-control"></label></div > <div class="col form-group"><input type="number" class="form-control" value="1"></div><div class="col form-group"><label type="number" class="form-control" data-name="price"></label></div><div class="col form-group"><label type="number" name="total" class="form-control"></label></div><div class="col form-group"><a onclick="removeLine()" class="form-control btn btn-primary btn-danger btn-sm" >  remove </a></div>     </li> ');
+            });
+
+            $('#newLineHtml').hide();
+
+
+        });
+
+
+
+    </script>
+}
+
+

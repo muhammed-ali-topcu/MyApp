@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="~/css/style.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/js/script.js"></script>
+    <script src="~/lib/tether/dist/js/tether.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+
+
+</head>
+<body>
+    @Html.Partial("_NavBar")
+    @if (TempData["message"] != null)
+    {
+        <div class="alert alert-info">
+            @TempData["message"]
+        </div>
+    }
+    <div>
+        <div class="mt-1 row">
+            <div class="col-2">
+                <div class="ml-2">
+                    @*  @Html.Partial("_MainMenu") *@
+
+                    @await Component.InvokeAsync("Menu")
+                </div>
+            </div>
+            <div class="col-10">
+                <div class="container">
+                    <div class="text-danger" asp-validation-summary="All"></div>
+
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+ 
+    @RenderSection("scripts", false)
+
+</body>
+</html>

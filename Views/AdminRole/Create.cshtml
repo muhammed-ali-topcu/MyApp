@@ -1,0 +1,15 @@
+﻿@model IdentityRole
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+<div class=" text-danger" asp-validation-summary="All"></div>
+<form method="post" asp-controller="AdminRole" asp-action="Create">
+
+    <div class="form-group">
+        <label name="roleName"></label>
+        <input name="roleName" class="form-control" />
+    </div>
+    <button class="btn btn-primary" type="submit" asp-action="Create">Save</button>
+</form>

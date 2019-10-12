@@ -1,0 +1,21 @@
+﻿@model ReportCriteria
+@{
+    ViewData["Title"] = "InvoiceCretiria";
+
+}
+
+<h2>InvoiceCretiria</h2>
+
+<form action="CreateInvoiceReport" method="post">
+    <div class="form-group">
+        <label asp-for="FromDate"></label>
+        <input class="form-control" type="date" asp-for="FromDate" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ToDate"></label>
+        <input class="form-control" type="date" asp-for="ToDate" />
+    </div>
+
+    <input type="submit" class="btn btn-primary" value="OK" />
+</form>

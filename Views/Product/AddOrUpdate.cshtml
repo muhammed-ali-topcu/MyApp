@@ -1,0 +1,62 @@
+﻿@model Product
+@{
+    ViewData["Title"] = "AddOrUpdate";
+}
+
+<h2>AddOrUpdate</h2>
+
+
+<form method="post" asp-controller="Product" asp-action="AddOrUpdate" enctype="multipart/form-data">
+    <input type="hidden" asp-for="ProductId" />
+    <input type="hidden" asp-for="CompanyId" />
+    <input type="hidden" asp-for="Image" />
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input type="text" class="form-control" asp-for="Name" id="formGroupExampleInput">
+    </div>  
+    <div class="form-group">
+        <label asp-for="Parcode"></label>
+        <input type="number" class="form-control" asp-for="Parcode" id="formGroupExampleInput">
+    </div>
+    <div class="form-group">
+        <label asp-for="ShortCode"></label>
+        <input type="number" class="form-control" asp-for="ShortCode" id="formGroupExampleInput">
+    </div>
+    <div class="form-group">
+        <label asp-for="PurchasePrice"></label>
+        <input type="number" class="form-control" asp-for="PurchasePrice" id="formGroupExampleInput">
+    </div>
+    <div class="form-group">
+        <label asp-for="MonopolyPrice"></label>
+        <input type="number" class="form-control" asp-for="MonopolyPrice" id="formGroupExampleInput">
+    </div>
+    <div class="form-group">
+        <label asp-for="WholesalePrice"></label>
+        <input type="number" class="form-control" asp-for="WholesalePrice" id="formGroupExampleInput">
+    </div>
+    <div class="form-group">
+        <label asp-for="Quntity"></label>
+        <input type="number" class="form-control" asp-for="Quntity" id="formGroupExampleInput">
+    </div>
+    <div class="form-group">
+        <label asp-for="Notes"></label>
+        <textarea type="text" class="form-control" asp-for="Notes" id="formGroupExampleInput"></textarea>
+    </div>
+
+
+
+    <div class="form-group">
+        <img src="~/img/@Model.Image" width="200" />
+        <br />
+        <label asp-for="Image"></label>
+        <input type="file" class="form-control" name="file" id="file">
+    </div>
+
+
+
+
+    @* add Delete Button*@
+    <button type="submit" class="btn btn-primary" asp-action="AddOrUpdate">Save</button>
+</form>
+
+
